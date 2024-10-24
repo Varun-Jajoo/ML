@@ -1,0 +1,45 @@
+import pandas as pd
+from sklearn.datasets import load_iris
+
+# Load Iris dataset
+iris = load_iris()
+
+# Convert to pandas DataFrame for easier inspection
+data = pd.DataFrame(iris.data, columns=iris.feature_names)
+data['target'] = iris.target
+
+# Check for missing values
+print(data.isnull().sum())  # Typically, no missing values in Iris dataset
+
+# Display basic information and summary statistics
+print(data.info())
+print(data.describe())
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+
+
+
+# Split the data into training and testing sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Build the decision tree model with Entropy criterion
+dt_entropy = DecisionTreeClassifier(criterion='entropy', max_depth=4, min_samples_split=2)
+
+# Train the model
+dt_entropy.fit(X_train, y_train)
+
+# Make predictions
+y_pred_entropy = dt_entropy.predict(X_test)
+from sklearn.metrics import accuracy_score
+
+# Calculate accuracy
+accuracy_entropy = accuracy_score(y_test, y_pred_entropy)
+
+print(f"Accuracy of Decision Tree (Entropy, max_depth=4): {accuracy_entropy:.2f}")
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+# Visualize the tree structure
+plt.figure(figsize=(12,8))
+plot_tree(dt_entropy, feature_names=iris.feature_names, class_names=iris.target_names, filled=True)
+plt.show()
